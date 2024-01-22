@@ -64,7 +64,7 @@ jobs:
       # Run the POSTMAN collection
       - name: Run POSTMAN collection
         run: |
-         newman run ./weather-forecast-api.postman_collection.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
+         newman run ./weather-forecast-api.postman_collection.json
 
       # Upload the contents of Test Results directory to workspace
       - name: Output the run Details
