@@ -36,7 +36,7 @@ public class WeatherForecastServiceTest
         Assert.True(response.GetType() == typeof(Forecast));
         Assert.Equal(response.Date, DateOnly.FromDateTime(DateTime.Now));
         Assert.InRange(response.TemperatureC, -20, 55);
-        Assert.InRange(response.TemperatureC, -4, 131); 
+        Assert.InRange(response.TemperatureF, -4, 131); 
         Assert.Contains(response.Summary, Constants.Summaries);
     }
 }
