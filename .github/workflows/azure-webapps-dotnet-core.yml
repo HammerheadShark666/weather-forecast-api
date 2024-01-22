@@ -61,14 +61,14 @@ jobs:
       - name: Install Node on runner
         uses: actions/setup-node@v1
         with:
-          node-version: '14'
+          node-version: '20.11.0'
 
       - name: Install newman utility
         run: npm install -g newman
         
       - name: Integration Tests
         run: |          
-          newman run "weather-forecast-api.postman_collection"     
+          newman run "weather-forecast-api.postman_collection.json"     
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
