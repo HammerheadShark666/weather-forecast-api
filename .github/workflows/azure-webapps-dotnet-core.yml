@@ -39,11 +39,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '8.0'
-          include-prerelease: true
+       # INstall Node on the runner
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with: 
+            node-version: '22.x'    
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
@@ -51,15 +51,28 @@ jobs:
       - name: Unit Tests
         run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
  
-      - name: Install newman utility
-        run: npm install -g newman
-        
-      - name: Integration Tests
-        run: |    
-          npm run start:dev &
-          sleep 30
-          newman run "weather-forecast-api.postman_collection.json"     
+       # Install the newman command line utility and also install the html extra reporter
+      - name: Install newman
+        run: |
+         npm install -g newman
+         npm install -g newman-reporter-htmlextra
 
+      # Make directory to upload the test results
+      - name: Make Directory for results
+        run: mkdir -p testResults
+
+      # Run the POSTMAN collection
+      - name: Run POSTMAN collection
+        run: |
+         newman run ./weather-forecast-api.postman_collection.json -e ./tests/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
+
+      # Upload the contents of Test Results directory to workspace
+      - name: Output the run Details
+        uses: actions/upload-artifact@v2
+        with: 
+         name: RunReports
+         path: testResults 
+         
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
