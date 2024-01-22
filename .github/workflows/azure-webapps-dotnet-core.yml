@@ -58,6 +58,15 @@ jobs:
       - name: Unit Tests
         run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
 
+      - name: Install newman utility
+        run: npm install -g newman
+        
+      - name: Integration Tests
+        run: | 
+          npm run start:dev &
+          sleep 30
+          newman run "weather-forecast-api.postman_collection"     
+
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
