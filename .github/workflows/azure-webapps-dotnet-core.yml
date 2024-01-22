@@ -58,6 +58,11 @@ jobs:
       - name: Unit Tests
         run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
 
+      - name: Install Node on runner
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+
       - name: Install newman utility
         run: npm install -g newman
         
