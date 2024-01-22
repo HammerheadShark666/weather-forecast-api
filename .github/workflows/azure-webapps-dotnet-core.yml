@@ -34,7 +34,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -57,17 +57,14 @@ jobs:
 
       - name: Unit Tests
         run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
-
-      - name: Install Node on runner
-        uses: actions/setup-node@v1
-        with:
-          node-version: '20.11.0'
-
+ 
       - name: Install newman utility
         run: npm install -g newman
         
       - name: Integration Tests
-        run: |          
+        run: |    
+          npm run start:dev &
+          sleep 30
           newman run "weather-forecast-api.postman_collection.json"     
 
       - name: dotnet publish
