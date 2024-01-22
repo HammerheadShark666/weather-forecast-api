@@ -67,9 +67,7 @@ jobs:
         run: npm install -g newman
         
       - name: Integration Tests
-        run: | 
-          npm run start:dev &
-          sleep 30
+        run: |          
           newman run "weather-forecast-api.postman_collection"     
 
       - name: dotnet publish
