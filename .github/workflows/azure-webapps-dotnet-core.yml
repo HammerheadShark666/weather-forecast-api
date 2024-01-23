@@ -69,14 +69,12 @@ jobs:
       - name: Make Directory for results
         run: mkdir -p testResults
 
-
       - name: Setup API and run tests
-        run: |
-          cd Postman Tests
-          chmod +x ./Scripts/wait-for-it.sh
-          dotnet run --project=../WeatherForecast.Api/ &
+        run: |        
+          chmod +x wait-for-it.sh
+          dotnet run --project=./WeatherForecast.Api/ &
           API_PID=$!
-          ./Scripts/wait-for-it.sh -t 60 localhost:5000 -- && sh ./Scripts/run-all-api-tests.sh
+          wait-for-it.sh -t 60 localhost:5000 -- && sh run-all-api-tests.sh
           kill $API_PID 
           
       # Upload the contents of Test Results directory to workspace
