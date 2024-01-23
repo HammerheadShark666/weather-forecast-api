@@ -7,10 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherForecast.Api", "Weat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherForecast.Test", "WeatherForecast.Test\WeatherForecast.Test.csproj", "{018D6F8A-00A1-48E8-8080-2AD509C670A7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C7A2D415-91F7-4ECE-900E-2E47E711B662}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0BF057BF-252C-4A5F-AF6E-498568119905}"
 	ProjectSection(SolutionItems) = preProject
-		package.json = package.json
-		weather-forecast-api.postman_collection = weather-forecast-api.postman_collection
+		Postman Tests\Scripts\run-all-api-tests.sh = Postman Tests\Scripts\run-all-api-tests.sh
+		Postman Tests\Scripts\wait-for-it.sh = Postman Tests\Scripts\wait-for-it.sh
+		Postman Tests\weather-forecast-api.postman_collection.json = Postman Tests\weather-forecast-api.postman_collection.json
 	EndProjectSection
 EndProject
 Global
