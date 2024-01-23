@@ -12,12 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "postman_tests", "postman_te
 		weather-forecast-api.postman_collection.json = weather-forecast-api.postman_collection.json
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{C2CB968C-2BCE-4F90-9D8E-29A396853DCD}"
-	ProjectSection(SolutionItems) = preProject
-		run-all-api-tests.sh = run-all-api-tests.sh
-		wait-for-it.sh = wait-for-it.sh
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,9 +29,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{C2CB968C-2BCE-4F90-9D8E-29A396853DCD} = {8B174C9D-9D30-424B-8210-785C5265695F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52ED64AF-F140-4E0C-8314-F711D1A52948}
