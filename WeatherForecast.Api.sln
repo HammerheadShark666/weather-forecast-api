@@ -7,11 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherForecast.Api", "Weat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherForecast.Test", "WeatherForecast.Test\WeatherForecast.Test.csproj", "{018D6F8A-00A1-48E8-8080-2AD509C670A7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0BF057BF-252C-4A5F-AF6E-498568119905}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "postman_tests", "postman_tests", "{8B174C9D-9D30-424B-8210-785C5265695F}"
 	ProjectSection(SolutionItems) = preProject
-		Postman Tests\Scripts\run-all-api-tests.sh = Postman Tests\Scripts\run-all-api-tests.sh
-		Postman Tests\Scripts\wait-for-it.sh = Postman Tests\Scripts\wait-for-it.sh
-		Postman Tests\weather-forecast-api.postman_collection.json = Postman Tests\weather-forecast-api.postman_collection.json
+		weather-forecast-api.postman_collection.json = weather-forecast-api.postman_collection.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{C2CB968C-2BCE-4F90-9D8E-29A396853DCD}"
+	ProjectSection(SolutionItems) = preProject
+		run-all-api-tests.sh = run-all-api-tests.sh
+		wait-for-it.sh = wait-for-it.sh
 	EndProjectSection
 EndProject
 Global
@@ -31,6 +35,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C2CB968C-2BCE-4F90-9D8E-29A396853DCD} = {8B174C9D-9D30-424B-8210-785C5265695F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52ED64AF-F140-4E0C-8314-F711D1A52948}
