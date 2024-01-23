@@ -69,7 +69,7 @@ jobs:
       # Run the POSTMAN collection
       - name: Run POSTMAN collection
         run: |
-         newman run ./weather-forecast-api.postman_collection.json --env-var "baseUrl=https://localhost:5000/" --insecure
+         newman run ./weather-forecast-api.postman_collection.json --env-var "baseUrl=http://localhost:5000/" --insecure
           
       # Upload the contents of Test Results directory to workspace
       - name: Output the run Details
