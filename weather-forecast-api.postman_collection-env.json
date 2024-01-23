@@ -4,7 +4,7 @@
   "values": [
     {
       "key": "baseUrl",
-      "value": "https://localhost:80",
+      "value": "https://127.0.0.1:7072",
       "type": "default",
       "enabled": true
     }
