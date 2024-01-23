@@ -69,12 +69,16 @@ jobs:
       - name: Make Directory for results
         run: mkdir -p testResults
 
-      # Run the POSTMAN collection
-      - name: Run POSTMAN collection
-        run: |
-         dotnet build ./WeatherForecast.Api/WeatherForecast.Api.csproj --configuration Release --no-restore
-         newman run ./weather-forecast-api.postman_collection.json --insecure
 
+      - name: Setup API and run tests
+        run: |
+          cd shell_scripts
+          chmod +x ./Postman Tests/Scripts/wait-for-it.sh
+          dotnet run --project=./WeatherForecast.Api/ &
+          API_PID=$!
+          ./Postman Tests/Scripts/wait-for-it.sh -t 60 localhost:5000 -- && sh ./Postman Tests/Scripts/run-all-api-tests.sh
+          kill $API_PID 
+          
       # Upload the contents of Test Results directory to workspace
       - name: Output the run Details
         uses: actions/upload-artifact@v2
