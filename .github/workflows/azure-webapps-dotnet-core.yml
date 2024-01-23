@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
        # INstall Node on the runner
       - name: Install Node
@@ -45,8 +45,16 @@ jobs:
         with: 
             node-version: '20.11.0'    
 
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install dependencies
+        run: dotnet restore ./WeatherForecast.Api/WeatherForecast.Api.csproj
+  
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build ./WeatherForecast.Api/WeatherForecast.Api.csproj --configuration Release --no-restore
 
       - name: Unit Tests
         run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
