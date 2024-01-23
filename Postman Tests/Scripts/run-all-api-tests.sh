@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-for file in ../tests/api/*.json
+for file in ../*.json
 do
   newman run "$file"
 done
