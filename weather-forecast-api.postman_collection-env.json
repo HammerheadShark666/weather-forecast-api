@@ -4,7 +4,7 @@
   "values": [
     {
       "key": "baseUrl",
-      "value": "https//127.0.0.1",
+      "value": "http//127.0.0.1",
       "type": "default",
       "enabled": true
     }
