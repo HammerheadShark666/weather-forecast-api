@@ -55,10 +55,7 @@ jobs:
   
       - name: Build with dotnet
         run: dotnet build ./WeatherForecast.Api/WeatherForecast.Api.csproj --configuration Release --no-restore
-
-      - name: Run project
-        run: dotnet run --project ./WeatherForecast.Api/WeatherForecast.Api.csproj
-
+ 
       - name: Unit Tests
         run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
  
