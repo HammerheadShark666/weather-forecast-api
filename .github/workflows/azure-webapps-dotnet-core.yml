@@ -51,7 +51,7 @@ jobs:
           dotnet-version: 8.0.x 
   
       - name: Build with dotnet
-        run: dotnet build ./WeatherForecast.Api/WeatherForecast.Api.csproj --configuration Release --no-restore
+        run: dotnet build --configuration Release
  
       - name: Unit Tests
         run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
