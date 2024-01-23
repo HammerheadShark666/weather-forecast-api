@@ -48,10 +48,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.x
-
-      - name: Install dependencies
-        run: dotnet restore ./WeatherForecast.Api/WeatherForecast.Api.csproj
+          dotnet-version: 8.0.x 
   
       - name: Build with dotnet
         run: dotnet build ./WeatherForecast.Api/WeatherForecast.Api.csproj --configuration Release --no-restore
@@ -69,13 +66,10 @@ jobs:
       - name: Make Directory for results
         run: mkdir -p testResults
 
-      - name: Setup API and run tests
-        run: |        
-          chmod +x wait-for-it.sh
-          dotnet run --project=./WeatherForecast.Api/ &
-          API_PID=$!
-          wait-for-it.sh -t 60 localhost:5000 -- && sh run-all-api-tests.sh
-          kill $API_PID 
+      # Run the POSTMAN collection
+      - name: Run POSTMAN collection
+        run: |
+         newman run ./weather-forecast-api.postman_collection.json --env-var "baseUrl=https://localhost:5000/" --insecure
           
       # Upload the contents of Test Results directory to workspace
       - name: Output the run Details
