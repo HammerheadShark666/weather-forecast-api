@@ -43,5 +43,20 @@ public static class WeatherForecastEndpoints
 
            return generatedOperation;
        });
+
+       app.MapGet("/weather-forecast/today", (IWeatherForecastService weatherForecastService) => {
+            return weatherForecastService.GetForecast(DateTime.Now);
+       })
+       .Produces<Forecast>()
+       .Produces(404)
+       .WithName("GetWeatherForecastToday")
+       .WithOpenApi(generatedOperation =>
+       { 
+           generatedOperation.Summary = "Get weather forecast for today.";
+           generatedOperation.Description = "Returns weather forecast for today.";
+           generatedOperation.Tags = new List<OpenApiTag> { new() { Name = "Weather Forecast" } };
+
+           return generatedOperation;
+       });
     }
 }
