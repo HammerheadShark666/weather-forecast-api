@@ -72,6 +72,7 @@ jobs:
       # Run the POSTMAN collection
       - name: Run POSTMAN collection
         run: |
+         dotnet run --project ./WeatherForecast.Api/WeatherForecast.Api.csproj
          newman run ./weather-forecast-api.postman_collection.json --insecure
 
       # Upload the contents of Test Results directory to workspace
