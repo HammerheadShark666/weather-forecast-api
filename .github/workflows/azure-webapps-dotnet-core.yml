@@ -55,6 +55,9 @@ jobs:
  
       - name: Unit Tests
         run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
  
        # Install the newman command line utility and also install the html extra reporter
       - name: Install newman
@@ -78,10 +81,7 @@ jobs:
         with: 
          name: RunReports
          path: testResults 
-         
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
+          
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
