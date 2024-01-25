@@ -71,9 +71,13 @@ jobs:
 
       # Run the POSTMAN collection
       - name: Run POSTMAN collection
-        run: |
-         dotnet build --configuration Release
-         newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json --insecure
+      - uses: matt-ball/newman-action@master
+        with:
+          collection: PostmanCollections/weather-forecast-api.json
+          environment: PostmanCollections/weather-forecast-api-env.json
+      #  run: |
+       #  dotnet build --configuration Release
+       #  newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json --insecure
           
       # Upload the contents of Test Results directory to workspace
       - name: Output the run Details
