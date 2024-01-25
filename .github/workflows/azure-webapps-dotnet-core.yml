@@ -35,7 +35,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -52,32 +51,7 @@ jobs:
   
       - name: Build with dotnet
         run: dotnet build --configuration Release
- 
-     # - name: Unit Tests
-     #   run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
- 
-       # Install the newman command line utility and also install the html extra reporter
-      - name: Install newman
-        run: |
-         npm install -g newman
-         npm install -g newman-reporter-htmlextra
-
-      # Make directory to upload the test results
-      - name: Make Directory for results
-        run: mkdir -p testResults
-
-      # Run the POSTMAN collection
-     # - name: Run POSTMAN collection
-     #   run: |
-     #    newman run ./weather-forecast-api.postman_collection.json --env-var "baseUrl=http://localhost:5000/" --insecure
-          
-      # Upload the contents of Test Results directory to workspace
-      - name: Output the run Details
-        uses: actions/upload-artifact@v2
-        with: 
-         name: RunReports
-         path: testResults 
-         
+  
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
@@ -97,8 +71,26 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
+       - uses: actions/checkout@v4
+
+      # INstall Node on the runner
+       - name: Install Node
+         uses: actions/setup-node@v1
+         with: 
+            node-version: '20.11.0'    
+
+       - name: Setup .NET Core
+         uses: actions/setup-dotnet@v3
+         with:
+          dotnet-version: 8.0.x 
+  
+       - name: Build with dotnet
+         run: dotnet build --configuration Release
+    
        - name: Unit Tests
          run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
+
+
 
   deploy:
     permissions:
