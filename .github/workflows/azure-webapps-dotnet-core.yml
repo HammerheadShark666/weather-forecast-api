@@ -116,11 +116,20 @@ jobs:
      #    run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
      #  Run the POSTMAN collection
-       - name: Run POSTMAN collection        
-         uses: matt-ball/newman-action@master
-         with:
-          collection: PostmanCollections/weather-forecast-api.json
-          environment: PostmanCollections/weather-forecast-api-env.json
+     #  - name: Run POSTMAN collection        
+     #    uses: matt-ball/newman-action@master
+     #    with:
+     #     collection: PostmanCollections/weather-forecast-api.json
+     #     environment: PostmanCollections/weather-forecast-api-env.json
+
+
+       - name: postman
+         run: | 
+            start-webapppool Test
+            start-iissite -Name Test
+            newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json --insecure
+       
+
            
       #  run: | 
       #    dotnet publish --self-contained -c Release -o ${{env.DOTNET_ROOT}}/myapp
