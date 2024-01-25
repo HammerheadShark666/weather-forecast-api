@@ -71,7 +71,7 @@ jobs:
 
       # Run the POSTMAN collection
       - name: Run POSTMAN collection
-      - uses: matt-ball/newman-action@master
+        uses: matt-ball/newman-action@master
         with:
           collection: PostmanCollections/weather-forecast-api.json
           environment: PostmanCollections/weather-forecast-api-env.json
