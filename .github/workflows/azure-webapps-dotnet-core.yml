@@ -125,7 +125,7 @@ jobs:
 
        - name: postman
          run: | 
-            newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json
+            newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json --insecure
        
 
            
