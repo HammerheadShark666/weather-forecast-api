@@ -53,6 +53,10 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
+      - name: Show runtime just to check it is there
+        run: |
+          ls /usr/share/dotnet/
+
         # Install the newman command line utility and also install the html extra reporter
       - name: Install newman
         run: |
