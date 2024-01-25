@@ -23,7 +23,8 @@ env:
   AZURE_WEBAPP_NAME: weather-forecast-api    # set this to the name of your Azure Web App
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '8.0'                 # set this to the .NET Core version to use
-
+  url: ${{ steps.step_name.outputs.url_output }}
+ 
 on:
   push:
     branches: [ "main" ]
@@ -34,9 +35,9 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest    
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4      
 
        # INstall Node on the runner
       - name: Install Node
@@ -52,8 +53,9 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release
   
-      - name: dotnet publish
+      - name: dotnet publish        
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+             echo "$url"  
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
