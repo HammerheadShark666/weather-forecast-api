@@ -43,7 +43,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v1
         with: 
-            node-version: '20.11.0'    
+            node-version: '19.9.0'    
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
@@ -69,12 +69,11 @@ jobs:
         run: mkdir -p testResults
 
      #  Run the POSTMAN collection
-    #  - name: Run POSTMAN collection
-        
-     #   uses: matt-ball/newman-action@master
-     #   with:
-     #     collection: PostmanCollections/weather-forecast-api.json
-      #    environment: PostmanCollections/weather-forecast-api-env.json
+      - name: Run POSTMAN collection        
+        uses: matt-ball/newman-action@master
+        with:
+          collection: PostmanCollections/weather-forecast-api.json
+          environment: PostmanCollections/weather-forecast-api-env.json
            
       #  run: | 
       #    dotnet publish --self-contained -c Release -o ${{env.DOTNET_ROOT}}/myapp
