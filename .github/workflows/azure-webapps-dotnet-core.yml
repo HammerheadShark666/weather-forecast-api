@@ -112,8 +112,8 @@ jobs:
       #- name: Make Directory for results
       #  run: mkdir -p testResults
 
-       - name: dotnet publish
-         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+     #  - name: dotnet publish
+     #    run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
      #  Run the POSTMAN collection
        - name: Run POSTMAN collection        
