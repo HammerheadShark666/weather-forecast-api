@@ -59,21 +59,21 @@ jobs:
       #    ls /usr/share/dotnet/
 
         # Install the newman command line utility and also install the html extra reporter
-      - name: Install newman
-        run: |
-         npm install -g newman
-         npm install -g newman-reporter-htmlextra
+      #- name: Install newman
+     #   run: |
+     #    npm install -g newman
+       #  npm install -g newman-reporter-htmlextra
 
       # Make directory to upload the test results
-      - name: Make Directory for results
-        run: mkdir -p testResults
+      #- name: Make Directory for results
+      #  run: mkdir -p testResults
 
      #  Run the POSTMAN collection
-      - name: Run POSTMAN collection        
-        uses: matt-ball/newman-action@master
-        with:
-          collection: PostmanCollections/weather-forecast-api.json
-          environment: PostmanCollections/weather-forecast-api-env.json
+     # - name: Run POSTMAN collection        
+     #   uses: matt-ball/newman-action@master
+     #   with:
+      #    collection: PostmanCollections/weather-forecast-api.json
+      #    environment: PostmanCollections/weather-forecast-api-env.json
            
       #  run: | 
       #    dotnet publish --self-contained -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -82,14 +82,14 @@ jobs:
           
           
       # Upload the contents of Test Results directory to workspace
-      - name: Output the run Details
-        uses: actions/upload-artifact@v2
-        with: 
-         name: RunReports
-         path: testResults 
+     # - name: Output the run Details
+     #   uses: actions/upload-artifact@v2
+     #   with: 
+     #    name: RunReports
+     #   path: testResults 
  
-      - name: Unit Tests
-        run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
+     # - name: Unit Tests
+     #   run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
 
    #   - name: dotnet publish
   #      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -101,6 +101,16 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+
+
+  test:
+
+    needs: build
+    runs-on: [self-hosted]
+    steps:
+      - name: Unit Tests
+        run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
+
 
   deploy:
     permissions:
