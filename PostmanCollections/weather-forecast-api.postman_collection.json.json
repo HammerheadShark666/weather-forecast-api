@@ -1,0 +1,135 @@
+{
+	"info": {
+		"_postman_id": "be798ba4-0299-4358-89bb-5990d1a40253",
+		"name": "WeatherForecast.Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/weather-forecast/5-day",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dc308cae-405d-4e94-8ccc-d87226cd54ef",
+						"exec": [
+							"pm.test(\"Status code is 300\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"weather forecast has 5 forecasts\", () => {\r",
+							"    let forcasts = pm.response.json();\r",
+							"    pm.expect(forcasts).to.have.length(5)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"weather forecast has properties\", () => {\r",
+							"    let forcasts = pm.response.json();\r",
+							"    let forcast = forcasts[0];\r",
+							"    pm.expect(forcast).to.have.property('date');\r",
+							"    pm.expect(forcast).to.have.property('temperatureC');\r",
+							"    pm.expect(forcast).to.have.property('temperatureF');\r",
+							"    pm.expect(forcast).to.have.property('summary');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "6518fa18-b73a-4657-b9e0-6f8400ba97a1",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/weather-forecast/5-day"
+			},
+			"response": []
+		},
+		{
+			"name": "/weather-forecast/2024-01-16",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1962d60e-5576-4e0b-953b-b82aac5bba58",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							" \r",
+							"pm.test(\"weather forecast has properties\", () => {\r",
+							"    let forcast = pm.response.json();\r",
+							"    pm.expect(forcast).to.have.property('date');\r",
+							"    pm.expect(forcast).to.have.property('temperatureC');\r",
+							"    pm.expect(forcast).to.have.property('temperatureF');\r",
+							"    pm.expect(forcast).to.have.property('summary');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "c4fd087c-5379-4b51-badb-2cb7ed61f193",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/weather-forecast?date=2020-07-25",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"weather-forecast"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2020-07-25"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/weather-forecast/today",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cb0275f6-6621-45e2-8744-7a9e4b550f7e",
+						"exec": [
+							"pm.test(\"Status code is 300\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							" \r",
+							"pm.test(\"weather forecast has properties\", () => {\r",
+							"    let forcast = pm.response.json();\r",
+							"    pm.expect(forcast).to.have.property('date');\r",
+							"    pm.expect(forcast).to.have.property('temperatureC');\r",
+							"    pm.expect(forcast).to.have.property('temperatureF');\r",
+							"    pm.expect(forcast).to.have.property('summary');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "d946aa6c-6d90-418b-8c1d-21ad89167a8e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/weather-forecast/today"
+			},
+			"response": []
+		}
+	]
+}
