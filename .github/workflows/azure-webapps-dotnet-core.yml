@@ -43,7 +43,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v1
         with: 
-            node-version: '19.9.0'    
+            node-version: '20.11.0'    
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
@@ -53,49 +53,34 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release
  
-
-     # - name: Show runtime just to check it is there
-      #  run: |
-      #    ls /usr/share/dotnet/
-
-        # Install the newman command line utility and also install the html extra reporter
-     #- name: Install newman
-      #  run: |
-      #   npm install -g newman
-     #    npm install -g newman-reporter-htmlextra
-
-      # Make directory to upload the test results
-    #  - name: Make Directory for results
-   #     run: mkdir -p testResults
-
-     #  Run the POSTMAN collection
-  #    - name: Run POSTMAN collection        
-   #     uses: matt-ball/newman-action@master
-   #     with:
-  #        collection: PostmanCollections/weather-forecast-api.json
-  #        environment: PostmanCollections/weather-forecast-api-env.json
-           
-      #  run: | 
-      #    dotnet publish --self-contained -c Release -o ${{env.DOTNET_ROOT}}/myapp
-      #    newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json --insecure
-       #  dotnet build --configuration Release
-          
-          
-      # Upload the contents of Test Results directory to workspace
-     # - name: Output the run Details
-     #   uses: actions/upload-artifact@v2
-     #   with: 
-     #    name: RunReports
-     #    path: testResults 
- 
       - name: Unit Tests
         run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
-
-   #   - name: dotnet publish
-  #      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
  
-     
+       # Install the newman command line utility and also install the html extra reporter
+      - name: Install newman
+        run: |
+         npm install -g newman
+         npm install -g newman-reporter-htmlextra
+
+      # Make directory to upload the test results
+      - name: Make Directory for results
+        run: mkdir -p testResults
+
+      # Run the POSTMAN collection
+     # - name: Run POSTMAN collection
+     #   run: |
+     #    newman run ./weather-forecast-api.postman_collection.json --env-var "baseUrl=http://localhost:5000/" --insecure
           
+      # Upload the contents of Test Results directory to workspace
+      - name: Output the run Details
+        uses: actions/upload-artifact@v2
+        with: 
+         name: RunReports
+         path: testResults 
+         
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
