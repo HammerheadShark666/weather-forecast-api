@@ -90,7 +90,39 @@ jobs:
        - name: Unit Tests
          run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
 
+  integration-test:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Development'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
+    steps:
+       - uses: actions/checkout@v4
+
+       # Install the newman command line utility and also install the html extra reporter
+       - name: Install newman
+         run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+
+      # Make directory to upload the test results
+      #- name: Make Directory for results
+      #  run: mkdir -p testResults
+
+     #  Run the POSTMAN collection
+       - name: Run POSTMAN collection        
+         uses: matt-ball/newman-action@master
+         with:
+          collection: PostmanCollections/weather-forecast-api.json
+          environment: PostmanCollections/weather-forecast-api-env.json
+           
+      #  run: | 
+      #    dotnet publish --self-contained -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      #    newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json --insecure
+       #  dotnet build --configuration Release
 
   deploy:
     permissions:
