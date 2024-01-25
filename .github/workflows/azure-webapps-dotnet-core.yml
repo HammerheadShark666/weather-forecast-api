@@ -70,10 +70,10 @@ jobs:
         run: mkdir -p testResults
 
       # Run the POSTMAN collection
-      #- name: Run POSTMAN collection
-      #  run: |
-      #   dotnet build --configuration Release
-      #   newman run ./weather-forecast-api.postman_collection.json -e ./weather-forecast-api.postman_collection-env.json --insecure
+      - name: Run POSTMAN collection
+        run: |
+         dotnet build --configuration Release
+         newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json --insecure
           
       # Upload the contents of Test Results directory to workspace
       - name: Output the run Details
