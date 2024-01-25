@@ -125,8 +125,8 @@ jobs:
 
        - name: postman
          run: | 
-            start-webapppool Test
-            start-iissite -Name Test
+            Start-Webapppool weather-forecast-api
+            Start-Iissite -Name weather-forecast-api
             newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json --insecure
        
 
