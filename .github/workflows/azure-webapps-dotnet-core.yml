@@ -77,7 +77,7 @@ jobs:
       #    environment: PostmanCollections/weather-forecast-api-env.json
            
         run: | 
-          dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+          dotnet publish --self-contained -c Release -o ${{env.DOTNET_ROOT}}/myapp
           newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json --insecure
        #  dotnet build --configuration Release
           
