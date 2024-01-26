@@ -33,12 +33,28 @@ jobs:
     - name: Unit Tests
       run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
 
-    - name: Postman Tests
-      run: |
-       cd WeatherForecast.Api
-       docker-compose up
+   # - name: Postman Tests
+    #  run: |
+   #    cd WeatherForecast.Api
+    #   docker-compose up
 
-  
+
+    # Install the newman command line utility and also install the html extra reporter
+    - name: Install newman
+      run: |
+       npm install -g newman
+       npm install -g newman-reporter-htmlextra
+    
+
+    - name: Run test cases
+      id: run-test-cases
+      run: |
+       echo --- Running test cases ---
+       docker-compose -f  -p  \
+       up --build --exit-code-from 
+       newman run ./weather-forecast-api.postman_collection.json -e ./weather-forecast-api.postman_collection-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
+       echo --- Completed test cases ---
+     
     - name: 'Docker Login'
       uses: azure/docker-login@v1
       with:
