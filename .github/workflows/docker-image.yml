@@ -56,7 +56,7 @@ jobs:
        #docker-compose -f  -p  \WeatherForecast.Api
        #up --build --exit-code-from 
        docker build -f ./WeatherForecast.Api/Dockerfile .
-       docker run -d -p 8081:80
+       docker run -d -p 8081:80 .
 
        
        newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
