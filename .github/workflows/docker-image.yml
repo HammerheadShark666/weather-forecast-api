@@ -38,6 +38,9 @@ jobs:
    #    cd WeatherForecast.Api
     #   docker-compose up
 
+    # Make directory to upload the test results
+    - name: Make Directory for results
+      run: mkdir -p testResults
 
     # Install the newman command line utility and also install the html extra reporter
     - name: Install newman
