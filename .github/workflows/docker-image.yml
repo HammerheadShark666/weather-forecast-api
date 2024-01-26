@@ -62,8 +62,8 @@ jobs:
        echo --- BUILD ---
        docker build -f ./WeatherForecast.Api/Dockerfile -t weatherforecastapi:latest .
        echo --- RUN ---
-       docker run --detach -p 8081:80 -e SIGNING_PROXY_LISTEN="0.0.0.0:8081" weatherforecastapi --network host .       
-
+       docker run --detach --network host -p 8081:80 weatherforecastapi .       
+       #-e SIGNING_PROXY_LISTEN="0.0.0.0:8081" 
        #echo --- CREATE ---
        #docker create --name abc ./WeatherForecast.Api/Dockerfile
        #echo --- START ---
