@@ -18,6 +18,14 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+         go-version: 1.19.5
+
+    - name: Unit Tests
+      run: go test -v ./WeatherForecast.Test
   
     - name: 'Docker Login'
       uses: azure/docker-login@v1
