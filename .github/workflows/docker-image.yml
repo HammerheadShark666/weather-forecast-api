@@ -55,7 +55,7 @@ jobs:
        echo --- Running test cases ---
        #docker-compose -f  -p  \WeatherForecast.Api
        #up --build --exit-code-from 
-       docker build -f WeatherForecast.Api\Dockerfile .
+       docker build -f ./WeatherForecast.Api/Dockerfile .
        docker run -d -p 8081:80
 
        
