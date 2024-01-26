@@ -70,6 +70,7 @@ jobs:
        #docker start abc
        #echo --- CHECK ---
        docker ps
+       curl -v http://localhost:8081/weather-forecast
        
        echo --- NEWMAN ---
        newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
