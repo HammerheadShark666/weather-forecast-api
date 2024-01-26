@@ -72,8 +72,8 @@ jobs:
        #echo --- CHECK ---
        docker ps
        #curl -v http://0.0.0.0:8081/weather-forecast
-       #curl -v http://localhost:8081/weather-forecast
-       curl -v host.docker.internal:8081
+       curl -v http://localhost:8081/weather-forecast
+       #curl -v host.docker.internal:8081
        
        echo --- NEWMAN ---
        newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
