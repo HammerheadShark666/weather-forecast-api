@@ -55,7 +55,7 @@ jobs:
        echo --- Running test cases ---
        docker-compose -f  -p  \
        up --build --exit-code-from 
-       newman run ./weather-forecast-api.json -e ./weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
+       newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
        echo --- Completed test cases ---
      
     - name: 'Docker Login'
