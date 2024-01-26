@@ -60,9 +60,16 @@ jobs:
        #docker build -f ./WeatherForecast.Api/Dockerfile .
        #docker run -d -p 8081:80 .
        echo --- BUILD ---
-       docker build -f ./WeatherForecast.Api/Dockerfile -t weatherforecastapi:latest .
+       #docker build -f ./WeatherForecast.Api/Dockerfile -t weatherforecastapi:latest .
        echo --- RUN ---
-       docker run --detach weatherforecastapi -p 8081:80 .       
+       #docker run --detach weatherforecastapi -p 8081:80 .       
+
+       echo --- CREATE ---
+       docker create --name abc ./WeatherForecast.Api/Dockerfile
+       echo --- START ---
+       docker start abc
+
+       
        echo --- NEWMAN ---
        newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
        echo --- Completed test cases ---
