@@ -53,7 +53,7 @@ jobs:
       id: run-test-cases
       run: |
        echo --- Running test cases ---
-       docker-compose -f  -p  \
+       docker-compose -f  -p  \WeatherForecast.Api
        up --build --exit-code-from 
        newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
        echo --- Completed test cases ---
