@@ -9,6 +9,8 @@ jobs:
   docker_build_push_acr:
     name: 'Docker Build and Push to ACR'
     runs-on: ubuntu-latest
+    container:
+      image: WeatherForecast.Api/Dockerfile
     environment: production
   
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -55,9 +57,10 @@ jobs:
        echo --- Running test cases ---
        #docker-compose -f  -p  \WeatherForecast.Api
        #up --build --exit-code-from 
-       docker build -f ./WeatherForecast.Api/Dockerfile .
-       docker run -d -p 8081:80 .
-
+       #docker build -f ./WeatherForecast.Api/Dockerfile .
+       #docker run -d -p 8081:80 .
+       docker build -f WeatherForecast.Api\Dockerfile -t weatherforecastapi:latest .
+       docker run weatherforecastapi -p 8081:80 .
        
        newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
        echo --- Completed test cases ---
