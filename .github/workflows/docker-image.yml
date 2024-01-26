@@ -70,7 +70,7 @@ jobs:
        #docker start abc
        #echo --- CHECK ---
        docker ps
-       curl -v http://0.0.0.0:8081/weather-forecast
+       #curl -v http://0.0.0.0:8081/weather-forecast
        curl -v http://localhost:8081/weather-forecast
        
        echo --- NEWMAN ---
