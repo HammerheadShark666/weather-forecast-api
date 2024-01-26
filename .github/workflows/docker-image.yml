@@ -9,8 +9,8 @@ jobs:
   docker_build_push_acr:
     name: 'Docker Build and Push to ACR'
     runs-on: ubuntu-latest
-    container:
-      image: WeatherForecast.Api/Dockerfile
+   # container:
+      #image: WeatherForecast.Api/Dockerfile
     environment: production
   
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
