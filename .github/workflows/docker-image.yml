@@ -34,7 +34,9 @@ jobs:
       run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
 
     - name: Postman Tests
-      run: docker-compose up
+      run: |
+       cd WeatherForecast.Api
+       docker-compose up
 
   
     - name: 'Docker Login'
