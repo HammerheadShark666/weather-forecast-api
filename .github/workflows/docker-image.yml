@@ -62,7 +62,7 @@ jobs:
        echo --- BUILD ---
        docker build -f ./WeatherForecast.Api/Dockerfile -t weatherforecastapi:latest .
        echo --- RUN ---
-       docker run weatherforecastapi -p 8081:80 -d .       
+       docker run -d weatherforecastapi -p 8081:80 .       
        echo --- NEWMAN ---
        newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
        echo --- Completed test cases ---
