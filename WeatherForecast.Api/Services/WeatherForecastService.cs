@@ -14,14 +14,14 @@ public class WeatherForecastService : IWeatherForecastService
                 Random.Shared.Next(-20, 55),
                 Constants.Summaries[Random.Shared.Next(Constants.Summaries.Length)]
             );
-    }
+    } 
 
-    public List<Forecast> GetForecast(int rangeFrom, int rangeTo)
+    public List<Forecast> GetForecast(DateTime date, int numberOfDays)
     {
-        return Enumerable.Range(rangeFrom, rangeTo).Select(index =>
+        return Enumerable.Range(1, numberOfDays).Select(index =>
             new Forecast
             (
-                DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                DateOnly.FromDateTime(date.AddDays(index)),
                 Random.Shared.Next(-20, 55),
                 Constants.Summaries[Random.Shared.Next(Constants.Summaries.Length)]
             )).ToList();

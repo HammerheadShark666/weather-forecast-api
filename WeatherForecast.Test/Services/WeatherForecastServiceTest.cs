@@ -11,9 +11,19 @@ public class WeatherForecastServiceTest
     {
         WeatherForecastService weatherForecastService = new WeatherForecastService();
 
-        List<Forecast> response = weatherForecastService.GetForecast(1, 5);
+        List<Forecast> response = weatherForecastService.GetForecast(DateTime.Now, 5);
 
         Assert.Equal(5, response.Count);
+    }
+
+    [Fact]
+    public void get_weather_forecast_for_number_of_days_from_today_return_3_day_weather_forecast()
+    {
+        WeatherForecastService weatherForecastService = new WeatherForecastService();
+
+        List<Forecast> response = weatherForecastService.GetForecast(DateTime.Now, 3);
+
+        Assert.Equal(3, response.Count);
     }
 
     [Fact]
@@ -21,7 +31,7 @@ public class WeatherForecastServiceTest
     {
         WeatherForecastService weatherForecastService = new WeatherForecastService();
 
-        List<Forecast> response = weatherForecastService.GetForecast(0, 0);
+        List<Forecast> response = weatherForecastService.GetForecast(DateTime.Now, 0);
 
         Assert.Empty(response);
     }
