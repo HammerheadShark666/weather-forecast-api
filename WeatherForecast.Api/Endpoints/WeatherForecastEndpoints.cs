@@ -10,7 +10,7 @@ public static class WeatherForecastEndpoints
     public static void ConfigureRoutes(this WebApplication app)
     {
         app.MapGet("/weather-forecast/5-day", (IWeatherForecastService weatherForecastService) => {
-            return weatherForecastService.GetForecast(1, 5);
+            return weatherForecastService.GetForecast(DateTime.Now, 5);
         })
        .Produces<Forecast[]>()
        .Produces(404)
@@ -23,7 +23,7 @@ public static class WeatherForecastEndpoints
        });
 
        app.MapGet("/weather-forecast", (DateTime date, IWeatherForecastService weatherForecastService) => {
-        return weatherForecastService.GetForecast(date); 
+            return weatherForecastService.GetForecast(date); 
        })
        .Produces<Forecast>()
        .Produces(404)
@@ -54,6 +54,28 @@ public static class WeatherForecastEndpoints
        { 
            generatedOperation.Summary = "Get weather forecast for today.";
            generatedOperation.Description = "Returns weather forecast for today.";
+           generatedOperation.Tags = new List<OpenApiTag> { new() { Name = "Weather Forecast" } };
+
+           return generatedOperation;
+       });
+
+       app.MapGet("/weather-forecast/from-today", (int numberofdays, IWeatherForecastService weatherForecastService) => {
+            return weatherForecastService.GetForecast(DateTime.Now, numberofdays);
+       })
+       .Produces<Forecast[]>()
+       .Produces(404)
+       .WithName("GetWeatherForecastFromTodayForNumberOfDays")
+       .WithOpenApi(generatedOperation =>
+       {
+           var parameter = generatedOperation.Parameters[0];
+           parameter.Description = "Number of days weather forecast required from today.";
+           parameter.In = ParameterLocation.Query;
+           parameter.Schema = new OpenApiSchema { Type = "int", Example = new OpenApiString("3") };
+           parameter.Required = true;
+           parameter.Example = new OpenApiString("3");
+
+           generatedOperation.Summary = "Get weather forecast for number of days from today.";
+           generatedOperation.Description = "Returns weather forecast for number of days from today.";
            generatedOperation.Tags = new List<OpenApiTag> { new() { Name = "Weather Forecast" } };
 
            return generatedOperation;
