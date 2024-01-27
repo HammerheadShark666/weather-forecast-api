@@ -62,9 +62,9 @@ jobs:
        echo --- BUILD ---
        docker build -f ./WeatherForecast.Api/Dockerfile -t weatherforecastapi:latest .
        echo --- RUN ---
-       docker run --detach -p 8081:80 weatherforecastapi .     
-
-       docker logs matter 
+       #docker run --detach -p 8081:80 weatherforecastapi .     
+       docker run --detach -p 8080:8080 weatherforecastapi .
+       #docker logs matter 
 
        
        #--network host
@@ -74,9 +74,12 @@ jobs:
        #echo --- START ---
        #docker start abc
        #echo --- CHECK ---
+       
        docker ps
+       
        #curl -v http://0.0.0.0:8081/weather-forecast
-       curl -v http://localhost:8081/weather-forecast
+       #curl -v http://localhost:8081/weather-forecast
+       curl -v http://localhost:8080/weather-forecast
        #curl -v host.docker.internal:8081
        
        echo --- NEWMAN ---
