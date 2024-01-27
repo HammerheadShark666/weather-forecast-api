@@ -46,49 +46,15 @@ jobs:
       id: run-test-cases
       run: |
        echo --- Running test cases ---
-       #docker-compose -f  -p  \WeatherForecast.Api
-       #up --build --exit-code-from 
-       #docker build -f ./WeatherForecast.Api/Dockerfile .
-       #docker run -d -p 8081:80 .
-       #echo --- BUILD ---
-       #docker build -f ./WeatherForecast.Api/Dockerfile -t weatherforecastapi:latest .
-       #echo --- RUN ---
-       #docker run --detach -p 8081:80 weatherforecastapi .     
-       #docker run --detach -p 8080:8080 weatherforecastapi .
-
+        
        docker-compose -f "docker-compose.yml" up -d
-
-       #- name: Build docker images
-       #  run: > 
-       #  docker build . -t weatherforecastapi:latest
-       #   -f ./WeatherForecast.Api/Dockerfile
-       #- name: Build exam
-       #  run: >
-       #    docker run -v 
-       #    $GITHUB_WORKSPACE:/srv 
-       #    -w/srv weatherforecastapi make
-
- 
-       #docker logs matter 
-       netstat -tulpn
-       
-       #--network host
-       #-e SIGNING_PROXY_LISTEN="0.0.0.0:8081"      --expose 8081 
-       #echo --- CREATE ---
-       #docker create --name abc ./WeatherForecast.Api/Dockerfile
-       #echo --- START ---
-       #docker start abc
-       #echo --- CHECK ---
-       
+  
+       netstat -tulpn 
        docker ps
        sleep 10s
-       #curl -v http://0.0.0.0:8081/weather-forecast
-       #curl -v http://localhost:8081/weather-forecast
-       curl -v http://0.0.0.0:8080/weather-forecast/5-day
-       #curl -v host.docker.internal:8081
-
-
-
+       
+       curl -v http://0.0.0.0:8080/weather-forecast/5-day 
+ 
     # Make directory to upload the test results
     - name: Make Directory for results
       run: mkdir -p testResults
@@ -99,8 +65,9 @@ jobs:
        npm install -g newman
        npm install -g newman-reporter-htmlextra
     
-
-       
+       sleep 10s
+    - name: run newman
+      run: |    
        echo --- NEWMAN ---
        newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
        sleep 10s
