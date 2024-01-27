@@ -9,7 +9,7 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["WeatherForecast.Api.csproj", "WeatherForecast.Api/"]
+COPY ["./WeatherForecast.Api/WeatherForecast.Api.csproj", "WeatherForecast.Api/"]
 RUN dotnet restore "./WeatherForecast.Api/./WeatherForecast.Api.csproj"
 COPY . WeatherForecast.Api
 WORKDIR "/src/WeatherForecast.Api"
