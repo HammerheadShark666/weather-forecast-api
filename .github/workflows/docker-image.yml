@@ -9,87 +9,61 @@ jobs:
   docker_build_push_acr:
     name: 'Docker Build and Push to ACR'
     runs-on: ubuntu-latest
-   # container:
-      #image: WeatherForecast.Api/Dockerfile
     environment: production
-  
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-  #  defaults:
-  #    run:
-  #       shell: bash
-  
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
-
- 
-  #  - name: Setup .NET Core
-  #    uses: actions/setup-dotnet@v3
-  #    with:
-  #       dotnet-version: 8.0.x 
-  
- #   - name: Build with dotnet
- #     run: dotnet build --configuration Release
- 
-    - name: Unit Tests
-      run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
-
-   # - name: Postman Tests
-    #  run: |
-   #    cd WeatherForecast.Api
-    #   docker-compose up
-
-  
-
-    - name: Run test cases
-      id: run-test-cases
-      run: |
-       echo --- Running test cases ---
-        
-       docker-compose -f "docker-compose.yml" up -d
-  
-       netstat -tulpn 
-       docker ps
-       sleep 10s
-       
-       curl -v http://0.0.0.0:8080/weather-forecast/5-day 
- 
-    # Make directory to upload the test results
-    - name: Make Directory for results
-      run: mkdir -p testResults
-
-    # Install the newman command line utility and also install the html extra reporter
-    - name: Install newman
-      run: |
-       npm install -g newman
-       npm install -g newman-reporter-htmlextra
     
-       #sleep 10s
-    - name: run newman
-      run: |    
-       echo --- NEWMAN ---
-       #newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
-       newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json
-       #sleep 10s
-       echo --- Completed test cases ---
-     
-    - name: 'Docker Login'
-      uses: azure/docker-login@v1
-      with:
-        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-        username: ${{ secrets.REGISTRY_USERNAME }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v4   
+
+      # Run unit tests
+      - name: Unit Tests
+        run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
+
+      # Compose Docker file
+      - name: Compose Docker file
+        id: run-test-cases
+        run: |         
+         docker-compose -f "docker-compose.yml" up -d  
+         netstat -tulpn 
+         docker ps
+         sleep 10s       
+         curl -v http://0.0.0.0:8080/weather-forecast/5-day 
  
-    - name: Build the frontend image and push it to ACR
-      uses: docker/build-push-action@v5
-      with:
-        push: true
-        tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/weatherforecastapi66:${{ github.sha }}
-        context: ./WeatherForecast.Api
-        file: WeatherForecast.Api/Dockerfile
+      # Make directory to upload the test results
+      - name: Make Directory for results
+        run: mkdir -p testResults
 
+      # Install the newman command line utility and also install the html extra reporter
+      - name: Install newman
+        run: |
+         npm install -g newman
+         npm install -g newman-reporter-htmlextra
 
-    - name: Stop containers
-      if: always()
-      run: docker-compose -f "docker-compose.yml" down
+      # Run newman postman collection tests
+      - name: run newman
+        run: |            
+         #newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
+         newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json
+
+      # Azure Registary Docker login
+      - name: 'Azure Docker Login'
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      # Push Docker container to Azure Container Registary
+      - name: Build the frontend image and push it to ACR
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/weatherforecastapi66:${{ github.sha }}
+          context: ./WeatherForecast.Api
+          file: WeatherForecast.Api/Dockerfile
+    
+      # Stop Docker containers
+      - name: Stop containers
+        if: always()
+        run: docker-compose -f "docker-compose.yml" down
