@@ -4,7 +4,7 @@ services:
   app:
     build: ./WeatherForecast.Api
     ports:
-      - 80:80
+      - 8081:8081
     networks:
       - app
 networks:
