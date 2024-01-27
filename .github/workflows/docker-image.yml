@@ -60,10 +60,24 @@ jobs:
        #docker build -f ./WeatherForecast.Api/Dockerfile .
        #docker run -d -p 8081:80 .
        echo --- BUILD ---
-       docker build -f ./WeatherForecast.Api/Dockerfile -t weatherforecastapi:latest .
+       #docker build -f ./WeatherForecast.Api/Dockerfile -t weatherforecastapi:latest .
        echo --- RUN ---
        #docker run --detach -p 8081:80 weatherforecastapi .     
-       docker run --detach -p 8080:8080 weatherforecastapi .
+       #docker run --detach -p 8080:8080 weatherforecastapi .
+
+
+    - name: Build docker images
+      run: > 
+       docker build . -t weatherforecastapi:latest
+       -f ./WeatherForecast.Api/Dockerfile
+    - name: Build exam
+      run: >
+       docker run -v 
+       $GITHUB_WORKSPACE:/srv 
+       -w/srv weatherforecastapi make
+
+
+       
        #docker logs matter 
        netstat -tulpn
        
