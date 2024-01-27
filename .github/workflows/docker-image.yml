@@ -40,16 +40,7 @@ jobs:
    #    cd WeatherForecast.Api
     #   docker-compose up
 
-    # Make directory to upload the test results
-    - name: Make Directory for results
-      run: mkdir -p testResults
-
-    # Install the newman command line utility and also install the html extra reporter
-    - name: Install newman
-      run: |
-       npm install -g newman
-       npm install -g newman-reporter-htmlextra
-    
+  
 
     - name: Run test cases
       id: run-test-cases
@@ -95,6 +86,20 @@ jobs:
        #curl -v http://localhost:8081/weather-forecast
        curl -v http://0.0.0.0:8080/weather-forecast/5-day
        #curl -v host.docker.internal:8081
+
+
+
+    # Make directory to upload the test results
+    - name: Make Directory for results
+      run: mkdir -p testResults
+
+    # Install the newman command line utility and also install the html extra reporter
+    - name: Install newman
+      run: |
+       npm install -g newman
+       npm install -g newman-reporter-htmlextra
+    
+
        
        echo --- NEWMAN ---
        newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
