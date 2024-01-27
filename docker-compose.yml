@@ -5,3 +5,9 @@ services:
     build: ./WeatherForecast.Api
     ports:
       - 80:80
+networks:
+  app:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.11.1/22
