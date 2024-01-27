@@ -76,7 +76,7 @@ jobs:
        #echo --- CHECK ---
        
        docker ps
-       
+       sleep 10s
        #curl -v http://0.0.0.0:8081/weather-forecast
        #curl -v http://localhost:8081/weather-forecast
        curl -v http://0.0.0.0:8080/weather-forecast
