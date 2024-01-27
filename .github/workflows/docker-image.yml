@@ -65,7 +65,7 @@ jobs:
        #docker run --detach -p 8081:80 weatherforecastapi .     
        docker run --detach -p 8080:8080 weatherforecastapi .
        #docker logs matter 
-
+       netstat -tulpn
        
        #--network host
        #-e SIGNING_PROXY_LISTEN="0.0.0.0:8081"      --expose 8081 
