@@ -1,0 +1,7 @@
+﻿version: '3'
+
+services:
+  app:
+    build: ./WeatherForecast.Api
+    ports:
+      - 8080:8080
