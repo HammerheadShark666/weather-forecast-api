@@ -70,7 +70,7 @@ jobs:
       run: |    
        echo --- NEWMAN ---
        newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
-       sleep 10s
+       #sleep 10s
        echo --- Completed test cases ---
      
     - name: 'Docker Login'
@@ -86,3 +86,8 @@ jobs:
         #push: true
         #tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/weatherforecastapi66:${{ github.sha }}
         #file: WeatherForecast.Api/Dockerfile
+
+
+    - name: Stop containers
+      if: always()
+      run: docker-compose -f "docker-compose.yml" down
