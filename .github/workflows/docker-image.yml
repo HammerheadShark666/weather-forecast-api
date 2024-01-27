@@ -51,7 +51,7 @@ jobs:
   
        netstat -tulpn 
        docker ps
-       #sleep 10s
+       sleep 10s
        
        curl -v http://0.0.0.0:8080/weather-forecast/5-day 
  
