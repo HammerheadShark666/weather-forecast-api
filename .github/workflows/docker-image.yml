@@ -79,7 +79,7 @@ jobs:
        sleep 10s
        #curl -v http://0.0.0.0:8081/weather-forecast
        #curl -v http://localhost:8081/weather-forecast
-       curl -v http://127.0.0.1:8080/weather-forecast
+       curl -v http://0.0.0.0:8080/weather-forecast
        #curl -v host.docker.internal:8081
        
        echo --- NEWMAN ---
