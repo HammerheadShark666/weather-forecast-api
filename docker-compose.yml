@@ -5,6 +5,8 @@ services:
     build: ./WeatherForecast.Api
     ports:
       - 80:80
+    networks:
+      - app
 networks:
   app:
     ipam:
