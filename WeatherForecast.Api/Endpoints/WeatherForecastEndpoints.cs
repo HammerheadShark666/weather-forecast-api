@@ -68,7 +68,7 @@ public static class WeatherForecastEndpoints
        .WithOpenApi(generatedOperation =>
        {
            var parameter = generatedOperation.Parameters[0];
-           parameter.Description = "Number of days weather forecast required from today.";
+           parameter.Description = "Number of days weather forecast required from tomorrow.";
            parameter.In = ParameterLocation.Query;
            parameter.Schema = new OpenApiSchema { Type = "int", Example = new OpenApiString("3") };
            parameter.Required = true;
