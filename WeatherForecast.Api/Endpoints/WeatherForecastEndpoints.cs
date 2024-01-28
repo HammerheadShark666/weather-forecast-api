@@ -70,9 +70,9 @@ public static class WeatherForecastEndpoints
            var parameter = generatedOperation.Parameters[0];
            parameter.Description = "Number of days weather forecast required from today.";
            parameter.In = ParameterLocation.Query;
-           parameter.Schema = new OpenApiSchema { Type = "int", Example = new OpenApiString("3") };
+           parameter.Schema = new OpenApiSchema { Type = "int", Example = new OpenApiString("2") };
            parameter.Required = true;
-           parameter.Example = new OpenApiString("3");
+           parameter.Example = new OpenApiString("2");
 
            generatedOperation.Summary = "Get weather forecast for number of days from today.";
            generatedOperation.Description = "Returns weather forecast for number of days from today.";
