@@ -2,6 +2,7 @@
 
 services:
   app:
+    image: weatherforecastapi66:latest
     build: ./WeatherForecast.Api
     ports:
       - 8080:8080
