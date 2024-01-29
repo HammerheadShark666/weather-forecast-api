@@ -40,7 +40,7 @@ jobs:
       - name: Test container running
         run: |
          sleep 10s       
-         curl -v http://0.0.0.0:8080/weather-forecast/5-day 
+         curl -v http://0.0.0.0:8080/api/v1/weather-forecast/5-day 
          
       # Install the newman command line utility
       - name: Install newman
