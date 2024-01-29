@@ -59,7 +59,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/weatherforecastapi66:latest
+          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/weatherforecastapidemo:latest
           context: ./WeatherForecast.Api
           file: WeatherForecast.Api/Dockerfile
     
