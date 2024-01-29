@@ -18,6 +18,6 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-WeatherForecastEndpoints.ConfigureRoutes(app);
+WeatherForecastEndpoints.ConfigureRoutes(app, builder.Configuration);
 
 app.Run();
