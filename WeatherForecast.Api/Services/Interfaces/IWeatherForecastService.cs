@@ -6,6 +6,5 @@ public interface IWeatherForecastService
 {
     Forecast GetForecast(DateTime date);
 
-    List<Forecast> GetForecast(DateTime date, int numberOfDays);
-    // List<Forecast> GetForecast(int rangeFrom, int rangeTo);
+    List<Forecast> GetForecast(DateTime date, int numberOfDays); 
 }

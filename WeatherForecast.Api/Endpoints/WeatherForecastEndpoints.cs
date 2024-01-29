@@ -7,9 +7,11 @@ namespace WeatherForecast.Api.Endpoints;
 
 public static class WeatherForecastEndpoints
 {
-    public static void ConfigureRoutes(this WebApplication app)
-    {
-        app.MapGet("/weather-forecast/5-day", (IWeatherForecastService weatherForecastService) => {
+    public static void ConfigureRoutes(this WebApplication app, ConfigurationManager configuration)
+    { 
+        var apiPrefix = $"api/{configuration["Api:Version"]}/";
+
+        app.MapGet($"{apiPrefix}weather-forecast/5-day", (IWeatherForecastService weatherForecastService) => {
             return weatherForecastService.GetForecast(DateTime.Now, 5);
         })
        .Produces<Forecast[]>()
@@ -22,7 +24,7 @@ public static class WeatherForecastEndpoints
            Tags = new List<OpenApiTag> { new() { Name = "Weather Forecast" } }
        });
 
-       app.MapGet("/weather-forecast", (DateTime date, IWeatherForecastService weatherForecastService) => {
+       app.MapGet($"{apiPrefix}weather-forecast", (DateTime date, IWeatherForecastService weatherForecastService) => {
             return weatherForecastService.GetForecast(date); 
        })
        .Produces<Forecast>()
@@ -44,7 +46,7 @@ public static class WeatherForecastEndpoints
            return generatedOperation;
        });
 
-       app.MapGet("/weather-forecast/today", (IWeatherForecastService weatherForecastService) => {
+       app.MapGet($"{apiPrefix}weather-forecast/today", (IWeatherForecastService weatherForecastService) => {
             return weatherForecastService.GetForecast(DateTime.Now);
        })
        .Produces<Forecast>()
@@ -59,7 +61,7 @@ public static class WeatherForecastEndpoints
            return generatedOperation;
        });
 
-       app.MapGet("/weather-forecast/from-today", (int numberofdays, IWeatherForecastService weatherForecastService) => {
+       app.MapGet($"{apiPrefix}weather-forecast/from-today", (int numberofdays, IWeatherForecastService weatherForecastService) => {
             return weatherForecastService.GetForecast(DateTime.Now, numberofdays);
        })
        .Produces<Forecast[]>()
