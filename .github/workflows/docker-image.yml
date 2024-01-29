@@ -24,12 +24,24 @@ jobs:
       - name: Compose Docker file and test container running
         id: run-test-cases
         run: |         
-         docker-compose -f "docker-compose.yml" up -d  
+         docker-compose -f "docker-compose.yml" up -d   
+         
+      # Netstat
+      - name: Netstat
+        run: |
          netstat -tulpn 
+
+      # Docker ps
+      - name: Docker ps
+        run: |
          docker ps
+         
+      # Test Container Running
+      - name: Test container running
+        run: |
          sleep 10s       
          curl -v http://0.0.0.0:8080/weather-forecast/5-day 
-  
+         
       # Install the newman command line utility
       - name: Install newman
         run: |
