@@ -8,7 +8,7 @@ builder.Services.ConfigureDI();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Weather Forecast API", Description = "Get weather forecast", Version = "v1" });
+    c.SwaggerDoc(builder.Configuration["Api:Version"], new OpenApiInfo { Title = "Weather Forecast API", Description = "Get weather forecast", Version = builder.Configuration["Api:Version"] });
 });
  
 var app = builder.Build();
