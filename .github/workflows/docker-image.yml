@@ -21,7 +21,7 @@ jobs:
         run: dotnet test WeatherForecast.Test/WeatherForecast.Test.csproj --logger "console;verbosity=detailed"
 
       # Compose Docker file
-      - name: Compose Docker file
+      - name: Compose Docker file and test container running
         id: run-test-cases
         run: |         
          docker-compose -f "docker-compose.yml" up -d  
@@ -29,22 +29,16 @@ jobs:
          docker ps
          sleep 10s       
          curl -v http://0.0.0.0:8080/weather-forecast/5-day 
- 
-      # Make directory to upload the test results
-      - name: Make Directory for results
-        run: mkdir -p testResults
-
-      # Install the newman command line utility and also install the html extra reporter
+  
+      # Install the newman command line utility
       - name: Install newman
         run: |
          npm install -g newman
-         npm install -g newman-reporter-htmlextra
 
       # Run newman postman collection tests
-      - name: run newman
+      - name: run postman collection tests on newman
         run: |            
-         #newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
-         newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json
+          newman run ./PostmanCollections/weather-forecast-api.json -e ./PostmanCollections/weather-forecast-api-env.json
 
       # Azure Registary Docker login
       - name: 'Azure Docker Login'
