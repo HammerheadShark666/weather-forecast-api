@@ -153,6 +153,67 @@
 				"url": "{{baseUrl}}/weather-forecast/today"
 			},
 			"response": []
+		},
+		{
+			"name": "/weather-forecast/from-today?numberofdays=3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c12bdd07-df19-4611-9489-ce8cdab62086",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"weather forecast has 3 days forecasts\", () => {\r",
+							"    let forcasts = pm.response.json();\r",
+							"    pm.expect(forcasts).to.have.length(3)\r",
+							"});\r",
+							"\r",
+							"const schema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"items\": [{\r",
+							"        type: \"object\",\r",
+							"        \"properties\": {\r",
+							"        \"date\": { \"type\": \"string\" },\r",
+							"        \"temperatureC\": { \"type\": \"integer\" },\r",
+							"        \"temperatureF\": { \"type\": \"integer\" },\r",
+							"        \"summary\": { \"type\": \"string\" }\r",
+							"        },\r",
+							"        \"required\": [\"date\", \"temperatureC\", \"temperatureF\", \"summary\"] \r",
+							"    }]    \r",
+							"};"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "f73781a9-effe-4fda-af16-1ff2e4573da4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/weather-forecast/from-today?numberofdays=3",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"weather-forecast",
+						"from-today"
+					],
+					"query": [
+						{
+							"key": "numberofdays",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
