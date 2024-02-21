@@ -85,6 +85,18 @@
 						],
 						"type": "text/javascript"
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "171fb220-b448-4ddd-a561-c9828d10b11c",
+						"exec": [
+							"var moment = require('moment');\r",
+							"\r",
+							"pm.environment.set('currentdate', moment().format((\"YYYY-MM-DD\")));"
+						],
+						"type": "text/javascript"
+					}
 				}
 			],
 			"id": "c4fd087c-5379-4b51-badb-2cb7ed61f193",
@@ -95,7 +107,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/weather-forecast?date=2020-07-25",
+					"raw": "{{baseUrl}}/weather-forecast?date={{currentdate}} ",
 					"host": [
 						"{{baseUrl}}"
 					],
@@ -105,7 +117,7 @@
 					"query": [
 						{
 							"key": "date",
-							"value": "2020-07-25"
+							"value": "{{currentdate}} "
 						}
 					]
 				}
