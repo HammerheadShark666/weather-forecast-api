@@ -1,29 +1,25 @@
-﻿using WeatherForecast.Api.Helpers;
+﻿using WeatherForecast.Api.Data.Interfaces;
 using WeatherForecast.Api.Model;
 using WeatherForecast.Api.Services.Interfaces;
 
 namespace WeatherForecast.Api.Services;
 
 public class WeatherForecastService : IWeatherForecastService
-{
-    public Forecast GetForecast(DateTime date)
+{ 
+    IForecastRepository _forecastRepository;
+
+    public WeatherForecastService(IForecastRepository forecastRepository)
+    { 
+        _forecastRepository = forecastRepository;
+    }
+
+    public Forecast? GetForecast(DateTime date)
     {
-        return new Forecast
-            (
-                DateOnly.FromDateTime(date),
-                Random.Shared.Next(-20, 55),
-                Constants.Summaries[Random.Shared.Next(Constants.Summaries.Length)]
-            );
-    } 
+        return _forecastRepository.GetForecast(date);
+    }
 
     public List<Forecast> GetForecast(DateTime date, int numberOfDays)
-    {
-        return Enumerable.Range(1, numberOfDays).Select(index =>
-            new Forecast
-            (
-                DateOnly.FromDateTime(date.AddDays(index)),
-                Random.Shared.Next(-20, 55),
-                Constants.Summaries[Random.Shared.Next(Constants.Summaries.Length)]
-            )).ToList();
-    }
+    {         
+        return _forecastRepository.GetForecast(date, numberOfDays);
+    }  
 }

@@ -1,4 +1,5 @@
-﻿using WeatherForecast.Api.Helpers;
+﻿using WeatherForecast.Api.Data;
+using WeatherForecast.Api.Helpers;
 using WeatherForecast.Api.Model;
 using WeatherForecast.Api.Services;
 
@@ -8,8 +9,8 @@ public class WeatherForecastServiceTest
 {  
     [Fact]
     public void get_weather_forecast_for_range_return_5_day_weather_forecast()
-    {
-        WeatherForecastService weatherForecastService = new WeatherForecastService();
+    { 
+        WeatherForecastService weatherForecastService = new WeatherForecastService(new ForecastRepository());
 
         List<Forecast> response = weatherForecastService.GetForecast(DateTime.Now, 5);
 
@@ -19,7 +20,7 @@ public class WeatherForecastServiceTest
     [Fact]
     public void get_weather_forecast_for_number_of_days_from_today_return_3_day_weather_forecast()
     {
-        WeatherForecastService weatherForecastService = new WeatherForecastService();
+        WeatherForecastService weatherForecastService = new WeatherForecastService(new ForecastRepository());
 
         List<Forecast> response = weatherForecastService.GetForecast(DateTime.Now, 3);
 
@@ -29,7 +30,7 @@ public class WeatherForecastServiceTest
     [Fact]
     public void get_weather_forecast_for_no_range_return_0_day_weather_forecast()
     {
-        WeatherForecastService weatherForecastService = new WeatherForecastService();
+        WeatherForecastService weatherForecastService = new WeatherForecastService(new ForecastRepository());
 
         List<Forecast> response = weatherForecastService.GetForecast(DateTime.Now, 0);
 
@@ -39,14 +40,15 @@ public class WeatherForecastServiceTest
     [Fact]
     public void get_weather_forecast_for_date_return_1_day_weather_forecast()
     {
-        WeatherForecastService weatherForecastService = new WeatherForecastService();
+        WeatherForecastService weatherForecastService = new WeatherForecastService(new ForecastRepository());
 
-        Forecast response = weatherForecastService.GetForecast(DateTime.Now);
-         
+        Forecast? response = weatherForecastService.GetForecast(DateTime.Now);
+
+        Assert.NotNull(response);
         Assert.True(response.GetType() == typeof(Forecast));
         Assert.Equal(response.Date, DateOnly.FromDateTime(DateTime.Now));
         Assert.InRange(response.TemperatureC, -20, 55);
-        Assert.InRange(response.TemperatureF, -4, 131); 
+        Assert.InRange(response.TemperatureF, -4, 131);
         Assert.Contains(response.Summary, Constants.Summaries);
     }
 }
