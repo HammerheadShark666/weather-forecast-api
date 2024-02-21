@@ -1,5 +1,8 @@
-﻿using Microsoft.OpenApi.Any;
+﻿using MediatR;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using WeatherForecast.Api.MediatR.Get5DayForecast;
+using WeatherForecast.Api.MediatR.GetForecastForDate;
 using WeatherForecast.Api.Model;
 using WeatherForecast.Api.Services.Interfaces;
 
@@ -11,9 +14,10 @@ public static class WeatherForecastEndpoints
     { 
         var apiPrefix = $"api/{configuration["Api:Version"]}/";
 
-        app.MapGet($"{apiPrefix}weather-forecast/5-day", (IWeatherForecastService weatherForecastService) => {
-            return weatherForecastService.GetForecast(DateTime.Now, 5);
-        })
+        app.MapGet($"{apiPrefix}weather-forecast/5-day", async (IMediator mediator) => {
+            Get5DayForecastResponse result = await mediator.Send(new Get5DayForecastRequest(DateTime.Now));
+            return result.Forecasts == null ? Results.NotFound() : Results.Ok(result); 
+        }) 
        .Produces<Forecast[]>()
        .Produces(404)
        .WithName("Get5DayWeatherForecast")
@@ -24,8 +28,9 @@ public static class WeatherForecastEndpoints
            Tags = new List<OpenApiTag> { new() { Name = "Weather Forecast" } }
        });
 
-       app.MapGet($"{apiPrefix}weather-forecast", (DateTime date, IWeatherForecastService weatherForecastService) => {
-            return weatherForecastService.GetForecast(date); 
+       app.MapGet($"{apiPrefix}weather-forecast", async (IMediator mediator, DateTime date) => {
+           GetForecastForDateResponse result = await mediator.Send(new GetForecastForDateRequest(date));
+           return result.Forecast == null ? Results.NotFound() : Results.Ok(result);
        })
        .Produces<Forecast>()
        .Produces(404)

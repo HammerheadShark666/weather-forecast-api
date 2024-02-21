@@ -10,7 +10,7 @@ public class ForecastRepository : IForecastRepository
 
     public ForecastRepository()
     {
-        _forecasts = Get14DaysOfForecasts();
+        _forecasts = ForecastHelper.GetDaysOfForecasts(14);
     }
 
     public Forecast? GetForecast(DateTime date)
@@ -21,26 +21,9 @@ public class ForecastRepository : IForecastRepository
     public List<Forecast> GetForecast(DateTime date, int numberOfDays)
     {
         var index = _forecasts.FindIndex(a => a.Date.Equals(DateOnly.FromDateTime(date)));
-        return _forecasts.GetRange(index, numberOfDays);
-    }
+        if (index == -1)
+            return new List<Forecast>();
 
-    private List<Forecast> Get14DaysOfForecasts()
-    {
-        List<Forecast> forecasts = new List<Forecast>();
-        var today = DateTime.Now;
-
-        for (int i = 0; i < 14; i++)
-        {
-            forecasts.Add(new Forecast
-            (
-                DateOnly.FromDateTime(today),
-                Random.Shared.Next(-20, 55),
-                Constants.Summaries[Random.Shared.Next(Constants.Summaries.Length)]
-            ));
-
-            today = today.AddDays(1);
-        }
-
-        return forecasts;
-    }
+        return _forecasts.GetRange(index, _forecasts.Count < numberOfDays ? _forecasts.Count : numberOfDays);
+    } 
 }

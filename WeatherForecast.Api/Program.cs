@@ -1,8 +1,14 @@
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using WeatherForecast.Api.Endpoints;
 using WeatherForecast.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddMediatR(_ => _.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
 
 builder.Services.ConfigureDI(); 
 builder.Services.AddEndpointsApiExplorer();
