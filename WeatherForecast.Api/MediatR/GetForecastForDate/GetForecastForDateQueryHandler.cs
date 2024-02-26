@@ -1,23 +1,23 @@
 using MediatR;
-using WeatherForecast.Api.Services.Interfaces;
+using WeatherForecast.Api.Data.Interfaces;
 
 namespace WeatherForecast.Api.MediatR.GetForecastForDate;
 
-public class GetForecastForDateQueryHandler : IRequestHandler<GetForecastForDateRequest, GetForecastForDateResponse>
+public class GetForecastForDateQueryHandler : IRequestHandler<GetForecastForDateRequest, AddForecastResponse>
 {
-    private readonly IWeatherForecastService _weatherForecastService; 
+    private readonly IForecastRepository _forecastRepository; 
 
-    public GetForecastForDateQueryHandler(IWeatherForecastService weatherForecastService)
+    public GetForecastForDateQueryHandler(IForecastRepository forecastRepository)
     {
-        _weatherForecastService = weatherForecastService; 
+        _forecastRepository = forecastRepository;
     }
 
-    public Task<GetForecastForDateResponse> Handle(GetForecastForDateRequest request, CancellationToken cancellationToken)
+    public Task<AddForecastResponse> Handle(GetForecastForDateRequest request, CancellationToken cancellationToken)
     {  
-        var result = _weatherForecastService.GetForecast(request.Date);
+        var result = _forecastRepository.GetForecast(DateOnly.FromDateTime(request.Date));
         if (result == null)
-            return Task.FromResult(new GetForecastForDateResponse(default));
+            return Task.FromResult(new AddForecastResponse(default));
 
-        return Task.FromResult(new GetForecastForDateResponse(result)); 
+        return Task.FromResult(new AddForecastResponse(result)); 
     }
 }

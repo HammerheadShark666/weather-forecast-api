@@ -1,16 +1,16 @@
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 using WeatherForecast.Api.Endpoints;
 using WeatherForecast.Api.Extensions;
+using WeatherForecast.Api.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-builder.Services.AddMediatR(_ => _.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-
-builder.Services.ConfigureDI(); 
+builder.Services.ConfigureDatabase();
+builder.Services.ConfigureDI();
+builder.Services.ConfigureMediatr();
+builder.Services.ConfigureAutomapper();
+builder.Services.ConfigureFluentValidation();
+builder.Services.ConfigureExceptionHandling();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -21,8 +21,8 @@ var app = builder.Build();
  
 app.UseSwagger();
 app.UseSwaggerUI(); 
-
 app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 WeatherForecastEndpoints.ConfigureRoutes(app, builder.Configuration);
 
