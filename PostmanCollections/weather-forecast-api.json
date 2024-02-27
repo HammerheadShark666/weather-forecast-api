@@ -18,28 +18,13 @@
 							"});\r",
 							"\r",
 							"pm.test(\"weather forecast has 5 forecasts\", () => {\r",
-							"    let forcasts = pm.response.json();\r",
-							"    pm.expect(forcasts).to.have.length(5)\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.forecasts).to.have.length(5)\r",
 							"});\r",
 							"\r",
-							"const schema = {\r",
-							"    \"type\": \"array\",\r",
-							"    \"items\": [{\r",
-							"        type: \"object\",\r",
-							"        \"properties\": {\r",
-							"        \"date\": { \"type\": \"string\" },\r",
-							"        \"temperatureC\": { \"type\": \"integer\" },\r",
-							"        \"temperatureF\": { \"type\": \"integer\" },\r",
-							"        \"summary\": { \"type\": \"string\" }\r",
-							"        },\r",
-							"        \"required\": [\"date\", \"temperatureC\", \"temperatureF\", \"summary\"] \r",
-							"    }]    \r",
-							"};\r",
-							" \r",
 							"pm.test('Schema validation', () => {\r",
-							"  pm.response.to.have.jsonSchema (schema);\r",
-							"});\r",
-							""
+							"  pm.response.to.have.jsonSchema (JSON.parse(pm.environment.get('forecasts_schema')));\r",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -57,43 +42,32 @@
 			"response": []
 		},
 		{
-			"name": "/weather-forecast/2024-01-16",
+			"name": "/weather-forecast/{{currentdate} (Success)",
 			"event": [
 				{
-					"listen": "test",
+					"listen": "prerequest",
 					"script": {
-						"id": "1962d60e-5576-4e0b-953b-b82aac5bba58",
+						"id": "2dd7e5aa-2921-4e20-ad6d-6fffab89d3a0",
 						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							" \r",
-							"const schema = {\r",
-							"    \"type\": \"object\",\r",
-							"    \"properties\": {\r",
-							"        \"date\": { \"type\": \"string\" },\r",
-							"        \"temperatureC\": { \"type\": \"integer\" },\r",
-							"        \"temperatureF\": { \"type\": \"integer\" },\r",
-							"        \"summary\": { \"type\": \"string\" }\r",
-							"    },\r",
-							"    \"required\": [\"date\", \"temperatureC\", \"temperatureF\", \"summary\"]\r",
-							"};\r",
-							" \r",
-							"pm.test('Schema validation', () => {\r",
-							"  pm.response.to.have.jsonSchema (schema);\r",
-							"});"
+							"var moment = require('moment');\r",
+							"\r",
+							"pm.environment.set('currentdate', moment().format((\"YYYY-MM-DD\")));"
 						],
 						"type": "text/javascript"
 					}
 				},
 				{
-					"listen": "prerequest",
+					"listen": "test",
 					"script": {
-						"id": "171fb220-b448-4ddd-a561-c9828d10b11c",
+						"id": "750316ce-58b8-471e-8071-3023563d8e68",
 						"exec": [
-							"var moment = require('moment');\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
 							"\r",
-							"pm.environment.set('currentdate', moment().format((\"YYYY-MM-DD\")));"
+							"pm.test('Schema validation', () => {\r",
+							"  pm.response.to.have.jsonSchema (JSON.parse(pm.environment.get('forecast_schema')));\r",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -125,6 +99,70 @@
 			"response": []
 		},
 		{
+			"name": "/weather-forecast/{{outOfRangeDate}} (Fail - Date out of range)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2dd7e5aa-2921-4e20-ad6d-6fffab89d3a0",
+						"exec": [
+							"var moment = require('moment');\r",
+							"\r",
+							"var outOfRangeDate = moment(moment(), \"DD-MM-YYYY\").add(15, 'days');\r",
+							"\r",
+							"pm.environment.set('outOfRangeDate', outOfRangeDate); "
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "750316ce-58b8-471e-8071-3023563d8e68",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"}); \r",
+							"\r",
+							"pm.test('Schema validation', () => {\r",
+							"  pm.response.to.have.jsonSchema (JSON.parse(pm.environment.get('fail_schema')));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has correct error message\", function () {\r",
+							"    let jsonData = pm.response.json();  \r",
+							"    pm.expect(jsonData.errors[0]).to.equal(\"Date has to be within 14 days of today\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "4e907b0b-1582-4c64-b155-e0133a2a3e65",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/weather-forecast?date={{outOfRangeDate}} ",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"weather-forecast"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "{{outOfRangeDate}} "
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/weather-forecast/today",
 			"event": [
 				{
@@ -135,20 +173,9 @@
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
-							"  \r",
-							"const schema = {\r",
-							"    \"type\": \"object\",\r",
-							"    \"properties\": {\r",
-							"        \"date\": { \"type\": \"string\" },\r",
-							"        \"temperatureC\": { \"type\": \"integer\" },\r",
-							"        \"temperatureF\": { \"type\": \"integer\" },\r",
-							"        \"summary\": { \"type\": \"string\" }\r",
-							"    },\r",
-							"    \"required\": [\"date\", \"temperatureC\", \"temperatureF\", \"summary\"]\r",
-							"};\r",
-							" \r",
+							"\r",
 							"pm.test('Schema validation', () => {\r",
-							"  pm.response.to.have.jsonSchema (schema);\r",
+							"  pm.response.to.have.jsonSchema (JSON.parse(pm.environment.get('forecast_schema')));\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -179,23 +206,13 @@
 							"});\r",
 							"\r",
 							"pm.test(\"weather forecast has 3 days forecasts\", () => {\r",
-							"    let forcasts = pm.response.json();\r",
-							"    pm.expect(forcasts).to.have.length(3)\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.forecasts).to.have.length(3)\r",
 							"});\r",
-							"\r",
-							"const schema = {\r",
-							"    \"type\": \"array\",\r",
-							"    \"items\": [{\r",
-							"        type: \"object\",\r",
-							"        \"properties\": {\r",
-							"        \"date\": { \"type\": \"string\" },\r",
-							"        \"temperatureC\": { \"type\": \"integer\" },\r",
-							"        \"temperatureF\": { \"type\": \"integer\" },\r",
-							"        \"summary\": { \"type\": \"string\" }\r",
-							"        },\r",
-							"        \"required\": [\"date\", \"temperatureC\", \"temperatureF\", \"summary\"] \r",
-							"    }]    \r",
-							"};"
+							" \r",
+							"pm.test('Schema validation', () => {\r",
+							"  pm.response.to.have.jsonSchema (JSON.parse(pm.environment.get('forecasts_schema')));\r",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -209,18 +226,290 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/weather-forecast/from-today?numberofdays=3",
+					"raw": "{{baseUrl}}/weather-forecast/from?fromDate=2024-03-01&numberofdays=3",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"weather-forecast",
-						"from-today"
+						"from"
 					],
 					"query": [
 						{
+							"key": "fromDate",
+							"value": "2024-03-01"
+						},
+						{
 							"key": "numberofdays",
 							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/weather-forecast/from?numberofdays=3 (Fail)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f6890090-d53d-4964-b988-7098e2b3468e",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test('Schema validation', () => {\r",
+							"  pm.response.to.have.jsonSchema (JSON.parse(pm.environment.get('fail_schema')));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has correct error message\", function () {\r",
+							"    let jsonData = pm.response.json();  \r",
+							"    pm.expect(jsonData.errors[0]).to.equal(\"Number of days must be 1 to 14.\");\r",
+							"    pm.expect(jsonData.errors[1]).to.equal(\"Date has to be within 14 days of today\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8bef6f7e-89be-4198-98ed-7a6d9bddfae7",
+						"exec": [
+							"var moment = require('moment');\r",
+							"\r",
+							"var outOfRangeDate = moment(moment(), \"DD-MM-YYYY\").add(15, 'days');\r",
+							"\r",
+							"pm.environment.set('outOfRangeDate', outOfRangeDate);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "47cafb7e-2ed4-4205-b2b0-edcf28f83c9e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/weather-forecast/from?fromdate={{outOfRangeDate}}&numberofdays=33",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"weather-forecast",
+						"from"
+					],
+					"query": [
+						{
+							"key": "fromdate",
+							"value": "{{outOfRangeDate}}"
+						},
+						{
+							"key": "numberofdays",
+							"value": "33"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{baseUrl}}/weather-forecast (Success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7e40b9df-d4e7-41ec-9577-8bd9bc5ded50",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Schema validation', () => {\r",
+							"  pm.response.to.have.jsonSchema (JSON.parse(pm.environment.get('forecast_schema')));\r",
+							"});\r",
+							"\r",
+							"let jsonData = pm.response.json();  \r",
+							" \r",
+							"pm.environment.set(\"newForecastId\", jsonData.forecast.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "1e8414af-85b7-4146-9397-775332d7e70b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"date\": \"2024-03-28\",\r\n  \"temperatureC\": 55,\r\n  \"summary\": \"Hot\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}/weather-forecast"
+			},
+			"response": []
+		},
+		{
+			"name": "{{baseUrl}}/weather-forecast (Fail - exists)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7e40b9df-d4e7-41ec-9577-8bd9bc5ded50",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test('Schema validation', () => {\r",
+							"  pm.response.to.have.jsonSchema (JSON.parse(pm.environment.get('fail_schema')));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has correct error message\", function () {\r",
+							"    let jsonData = pm.response.json();   \r",
+							"    pm.expect(jsonData.errors[0]).to.equal(\"Forecast already exists with this date\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "652e776c-7298-47fa-bf8b-1655ae21be0f",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"date\": \"2024-03-23\",\r\n  \"temperatureC\": 55,\r\n  \"summary\": \"Sunny\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}/weather-forecast"
+			},
+			"response": []
+		},
+		{
+			"name": "{{baseUrl}}/weather-forecast (Success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7e40b9df-d4e7-41ec-9577-8bd9bc5ded50",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "fd847344-d66a-4766-ae0d-3519fe729dcf",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/weather-forecast?id={{newForecastId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"weather-forecast"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{newForecastId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{baseUrl}}/weather-forecast (Fail - Not Found)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7e40b9df-d4e7-41ec-9577-8bd9bc5ded50",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test('Schema validation', () => {\r",
+							"  pm.response.to.have.jsonSchema (JSON.parse(pm.environment.get('fail_schema')));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Has correct error message\", function () {\r",
+							"    let jsonData = pm.response.json();   \r",
+							"    pm.expect(jsonData.errors[0]).to.equal(\"Forecast not found\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "307a915b-4589-4f68-b70a-8b53f4f22a28",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/weather-forecast?id={{newForecastId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"weather-forecast"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{newForecastId}}"
 						}
 					]
 				}
