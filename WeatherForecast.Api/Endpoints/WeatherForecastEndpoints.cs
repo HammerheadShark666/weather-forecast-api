@@ -1,13 +1,12 @@
 ﻿using MediatR;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using System.Net;
 using WeatherForecast.Api.Helpers;
+using WeatherForecast.Api.MediatR.AddForecast;
+using WeatherForecast.Api.MediatR.DeleteForecast;
 using WeatherForecast.Api.MediatR.GetForecastForDate;
 using WeatherForecast.Api.MediatR.GetMultiDayForecast;
-using WeatherForecast.Api.Domain;
-using WeatherForecast.Api.MediatR.AddForecast;
-using Microsoft.AspNetCore.Mvc;
-using WeatherForecast.Api.MediatR.DeleteForecast;
 
 namespace WeatherForecast.Api.Endpoints;
 
@@ -18,11 +17,12 @@ public static class WeatherForecastEndpoints
         var apiPrefix = $"api/{configuration["Api:Version"]}/";
 
         app.MapGet($"{apiPrefix}weather-forecast/5-day", async (IMediator mediator) => {
-            GetMultiDayForecastResponse result = await mediator.Send(new GetMultiDayForecastRequest(DateTime.Now, 5));
+            var result = await mediator.Send(new GetMultiDayForecastRequest(DateTime.Now, 5));
             return result.Forecasts == null ? Results.NotFound() : Results.Ok(result);
         })
-        .Produces<Forecast[]>()
-        .Produces(404)
+        .Produces<GetMultiDayForecastResponse>()
+        .Produces((int)HttpStatusCode.NotFound)
+        .Produces<List<string>>((int)HttpStatusCode.BadRequest)
         .WithName("Get5DayWeatherForecast")
         .WithOpenApi(x => new OpenApiOperation(x)
         {
@@ -32,11 +32,12 @@ public static class WeatherForecastEndpoints
         });
 
         app.MapGet($"{apiPrefix}weather-forecast", async (IMediator mediator, DateTime date) => {
-            AddForecastResponse result = await mediator.Send(new GetForecastForDateRequest(date));
-            return result.Forecast == null ? Results.NotFound() : Results.Ok(result);
-        })
-        .Produces<Forecast>()
-        .Produces(404)
+            var result = await mediator.Send(new GetForecastForDateRequest(date));
+            return result == null ? Results.NotFound() : Results.Ok(result);
+        })        
+        .Produces<GetForecastForDateResponse>()
+        .Produces((int)HttpStatusCode.NotFound)
+        .Produces<List<string>>((int)HttpStatusCode.BadRequest)
         .WithName("GetWeatherForecastByDate")
         .WithOpenApi(generatedOperation =>
         {
@@ -55,11 +56,12 @@ public static class WeatherForecastEndpoints
         });
 
         app.MapGet($"{apiPrefix}weather-forecast/today", async (IMediator mediator) => {
-            AddForecastResponse result = await mediator.Send(new GetForecastForDateRequest(DateTime.Now));
-            return result.Forecast == null ? Results.NotFound() : Results.Ok(result);
+            var result = await mediator.Send(new GetForecastForDateRequest(DateTime.Now));
+            return result == null ? Results.NotFound() : Results.Ok(result);
         })
-        .Produces<Forecast>()
-        .Produces(404)
+        .Produces<GetForecastForDateResponse>()
+        .Produces((int)HttpStatusCode.NotFound)
+        .Produces<List<string>>((int)HttpStatusCode.BadRequest)
         .WithName("GetWeatherForecastToday")
         .WithOpenApi(generatedOperation =>
         {
@@ -71,11 +73,12 @@ public static class WeatherForecastEndpoints
         });
 
         app.MapGet($"{apiPrefix}weather-forecast/from", async (IMediator mediator, DateTime fromDate, int numberOfDays) => {
-            GetMultiDayForecastResponse result = await mediator.Send(new GetMultiDayForecastRequest(fromDate, numberOfDays));
+            var result = await mediator.Send(new GetMultiDayForecastRequest(fromDate, numberOfDays));
             return result.Forecasts == null ? Results.NotFound() : Results.Ok(result);
-        })
-        .Produces<Forecast[]>()
-        .Produces(404)
+        }) 
+        .Produces<GetMultiDayForecastResponse>()
+        .Produces((int)HttpStatusCode.NotFound)
+        .Produces<List<string>>((int)HttpStatusCode.BadRequest)
         .WithName("GetWeatherForecastFromDateForNumberOfDays")
         .WithOpenApi(generatedOperation =>
         {
@@ -91,7 +94,7 @@ public static class WeatherForecastEndpoints
             parameterNumberOfDays.In = ParameterLocation.Query;
             parameterNumberOfDays.Schema = new OpenApiSchema { Type = "int", Example = new OpenApiString("4") };
             parameterNumberOfDays.Required = true;
-            parameterNumberOfDays.Example = new OpenApiString("4");
+            parameterNumberOfDays.Example = new OpenApiString("4"); 
 
             generatedOperation.Summary = $"Get weather forecast for number of days from date, within {Constants.NumberOfDaysForecastAvailable} days.";
             generatedOperation.Description = $"Returns weather forecast for number of days from date, within {Constants.NumberOfDaysForecastAvailable} days.";
@@ -104,110 +107,31 @@ public static class WeatherForecastEndpoints
             var forecast = await mediator.Send(addForecastRequest);
             return Results.Ok(forecast);
         })
-        .Produces<Forecast[]>()
-        .Produces(404)
-        .WithName("AddForecast");
-        //.WithOpenApi(generatedOperation =>
-        //{
+        .Accepts<AddForecastRequest>("application/json")
+        .Produces<AddForecastResponse>((int)HttpStatusCode.OK)
+        .Produces<List<string>>((int)HttpStatusCode.BadRequest)
+        .WithName("AddForecast")
+        .WithOpenApi(x => new OpenApiOperation(x)
+        {
+            Summary = "Add a forecast. Summary should be one of the following, 'Bracing','Chilly','Cool','Mild','Warm','Balmy','Hot','Sweltering','Scorching'",
+            Description = "Returns added forecast.",
+            Tags = new List<OpenApiTag> { new() { Name = "Weather Forecast" } }
+        }); 
 
-        //    generatedOperation.Tags = new[] { new OpenApiTag { Name = "test" } };
-        //    generatedOperation.RequestBody = new OpenApiRequestBody
-        //    {
-        //        Content = new Dictionary<string, OpenApiMediaType>
-        //        {
-        //            ["application/json"] = new OpenApiMediaType
-        //            {
-        //                Schema = context.SchemaGenerator.GenerateSchema(typeof(AddForecastRequest), context.SchemaRepository)
-        //            }
-        //        }
-        //    };
-
-        //    //generatedOperation.RequestBody = new OpenApiRequestBody()
-        //    //{
-        //    //    C
-        //    //};
-
-        //    return generatedOperation;
-        //});
-
-
-        //.WithOpenApi(generatedOperation =>
-        //{
-        //    var parameterDate = generatedOperation.Parameters[0];
-        //    parameterDate.Description = $"Date of forecast.";
-        //    parameterDate.In = ParameterLocation.Query;
-        //    parameterDate.Schema = new OpenApiSchema { Type = "string", Format = "date-time", Example = new OpenApiString("2024-01-23") };
-        //    parameterDate.Required = true;
-        //    parameterDate.Example = new OpenApiString("2024-01-23");
-
-        //    var parameterTempratureC = generatedOperation.Parameters[1];
-        //    parameterTempratureC.Description = $"Temprature in centigrade";
-        //    parameterTempratureC.In = ParameterLocation.Query;
-        //    parameterTempratureC.Schema = new OpenApiSchema { Type = "int", Example = new OpenApiString("4") };
-        //    parameterTempratureC.Required = true;
-        //    parameterTempratureC.Example = new OpenApiString("45");
-
-        //    var parameterSummary = generatedOperation.Parameters[1];
-        //    parameterSummary.Description = $"Summary of forecast";
-        //    parameterSummary.In = ParameterLocation.Query;
-        //    parameterSummary.Schema = new OpenApiSchema { Type = "string", Example = new OpenApiString("Cloudy") };
-        //    parameterSummary.Required = false;
-        //    parameterSummary.Example = new OpenApiString("cloudy");
-
-        //    generatedOperation.Summary = "Add a forecast for a day that doesn't have one.";
-        //    generatedOperation.Description = "Add a forecast for a day that doesn't have one.";
-        //    generatedOperation.Tags = new List<OpenApiTag> { new() { Name = "Weather Forecast" } };
-
-        //    return generatedOperation;
-        //});
-
-        //app.MapPost($"{apiPrefix}weather-forecast", async (IMediator mediator, DateTime fromDate, int temperatureC, string? summary) => {
-        //    await mediator.Send(new AddForecastRequest(fromDate, temperatureC, summary));
-        //    return Results.Ok();
-        //})
-        //.Produces<Forecast[]>()
-        //.Produces(404)
-        //.WithName("AddForecast")
-        //.WithOpenApi(generatedOperation =>
-        //{
-        //    var parameterDate = generatedOperation.Parameters[0];
-        //    parameterDate.Description = $"Date of forecast.";
-        //    parameterDate.In = ParameterLocation.Query;
-        //    parameterDate.Schema = new OpenApiSchema { Type = "string", Format = "date-time", Example = new OpenApiString("2024-01-23") };
-        //    parameterDate.Required = true;
-        //    parameterDate.Example = new OpenApiString("2024-01-23");
-
-        //    var parameterTempratureC = generatedOperation.Parameters[1];
-        //    parameterTempratureC.Description = $"Temprature in centigrade";
-        //    parameterTempratureC.In = ParameterLocation.Query;
-        //    parameterTempratureC.Schema = new OpenApiSchema { Type = "int", Example = new OpenApiString("4") };
-        //    parameterTempratureC.Required = true;
-        //    parameterTempratureC.Example = new OpenApiString("45");
-
-        //    var parameterSummary = generatedOperation.Parameters[1];
-        //    parameterSummary.Description = $"Summary of forecast";
-        //    parameterSummary.In = ParameterLocation.Query;
-        //    parameterSummary.Schema = new OpenApiSchema { Type = "string", Example = new OpenApiString("Cloudy") };
-        //    parameterSummary.Required = false;
-        //    parameterSummary.Example = new OpenApiString("cloudy");
-
-        //    generatedOperation.Summary = "Add a forecast for a day that doesn't have one.";
-        //    generatedOperation.Description = "Add a forecast for a day that doesn't have one.";
-        //    generatedOperation.Tags = new List<OpenApiTag> { new() { Name = "Weather Forecast" } };
-
-        //    return generatedOperation;
-        //});
-
-
-        app.MapDelete($"{apiPrefix}weather-forecast", async (IMediator mediator, long id) => {
+        app.MapDelete($"{apiPrefix}weather-forecast", async (IMediator mediator, long id) =>
+        {
             await mediator.Send(new DeleteForecastRequest(id));
             return Results.Ok();
-        })
-        .Produces<Forecast[]>()
-        .Produces(404)
-        .WithName("DeleteForecast");
-
-
-
+        })        
+        .Produces((int)HttpStatusCode.OK)
+        .Produces((int)HttpStatusCode.NotFound)
+        .Produces<List<string>>((int)HttpStatusCode.BadRequest)
+        .WithName("DeleteForecast")
+        .WithOpenApi(x => new OpenApiOperation(x)
+        {
+            Summary = "Deletes a forecast.",
+            Description = "Returns nothing",
+            Tags = new List<OpenApiTag> { new() { Name = "Weather Forecast" } }
+        }); 
     }
 }
