@@ -1,9 +1,14 @@
-﻿using WeatherForecast.Api.Model;
+﻿using WeatherForecast.Api.Domain;
 
 namespace WeatherForecast.Api.Data.Interfaces;
 
 public interface IForecastRepository
 {
-    Forecast? GetForecast(DateTime date);
-    List<Forecast> GetForecast(DateTime date, int numberOfDays);
+    Forecast? GetForecast(DateOnly date);
+    List<Forecast>? GetForecast(DateOnly date, int numberOfDays);
+    Forecast AddForecast(Forecast forecast);
+    long GetLastId();    
+    void Delete(long id);
+    bool Exists(long id);
+    bool Exists(DateOnly date);
 }

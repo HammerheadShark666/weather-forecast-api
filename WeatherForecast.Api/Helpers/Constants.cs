@@ -12,4 +12,6 @@ public static class Constants
         "Hot",
         "Sweltering",
         "Scorching" };
+
+    public static readonly int NumberOfDaysForecastAvailable = 14;
 }
