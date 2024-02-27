@@ -336,7 +336,7 @@
 							"\r",
 							"let jsonData = pm.response.json();  \r",
 							" \r",
-							"pm.environment.set(\"newForecastId\", jsonData.forecast.id);"
+							"pm.environment.set(\"newForecastId\", jsonData.id);"
 						],
 						"type": "text/javascript"
 					}
