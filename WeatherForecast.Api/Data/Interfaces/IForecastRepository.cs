@@ -5,6 +5,7 @@ namespace WeatherForecast.Api.Data.Interfaces;
 public interface IForecastRepository
 {
     Forecast? GetForecast(DateOnly date);
+    List<Forecast>? GetForecasts(string summary);
     List<Forecast>? GetForecast(DateOnly date, int numberOfDays);
     Forecast AddForecast(Forecast forecast);
     long GetLastId();    

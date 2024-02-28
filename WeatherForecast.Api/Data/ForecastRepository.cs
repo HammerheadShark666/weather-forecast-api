@@ -31,6 +31,17 @@ public class ForecastRepository : IForecastRepository
                                 }); 
     }
 
+    public List<Forecast>? GetForecasts(string summary)
+    {
+        return _memoryCache.GetOrCreate(
+                                summary,
+                                cacheEntry =>
+                                {
+                                    cacheEntry.SlidingExpiration = TimeSpan.FromMinutes(CacheExpirationMintues30);
+                                    return _context.Forecasts.Where(a => a.Summary != null && a.Summary.Equals(summary)).ToList();
+                                });
+    }
+
     public List<Forecast>? GetForecast(DateOnly date, int numberOfDays)
     {
         return _memoryCache.GetOrCreate(
