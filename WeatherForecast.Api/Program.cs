@@ -1,4 +1,3 @@
-using Microsoft.OpenApi.Models;
 using WeatherForecast.Api.Endpoints;
 using WeatherForecast.Api.Extensions;
 using WeatherForecast.Api.Helpers;
@@ -11,11 +10,8 @@ builder.Services.ConfigureMediatr();
 builder.Services.ConfigureAutomapper();
 builder.Services.ConfigureFluentValidation();
 builder.Services.ConfigureExceptionHandling();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc(builder.Configuration["Api:Version"], new OpenApiInfo { Title = "Weather Forecast API", Description = "Get weather forecast", Version = builder.Configuration["Api:Version"] });
-});
+builder.Services.ConfigureApiExplorer();
+builder.Services.ConfigureSwagger(builder); 
  
 var app = builder.Build();
  

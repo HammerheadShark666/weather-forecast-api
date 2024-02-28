@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 using WeatherForecast.Api.Data;
 using WeatherForecast.Api.Data.Context;
@@ -46,5 +47,18 @@ public static class ServiceExtensions
     public static void ConfigureFluentValidation(this IServiceCollection services)
     {
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+    }
+
+    public static void ConfigureApiExplorer(this IServiceCollection services)
+    {
+        services.AddEndpointsApiExplorer();
+    }
+
+    public static void ConfigureSwagger(this IServiceCollection services, WebApplicationBuilder builder)
+    {
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc(builder.Configuration["Api:Version"], new OpenApiInfo { Title = "Weather Forecast API", Description = "Get weather forecast", Version = builder.Configuration["Api:Version"] });
+        });
     }
 }
