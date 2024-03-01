@@ -55,18 +55,14 @@ internal sealed class ExceptionHandlingMiddleware : IMiddleware
             _ => exception.Message
         };  
      
-    private static List<string> GetErrors(Exception exception)
+    private static IEnumerable<string> GetErrors(Exception exception)
     { 
-        List<string> errors= new List<string>();
-
         if (exception is ValidationException validationException)
         {  
             foreach (var  error in validationException.Errors)
             {
-                errors.Add(error.ErrorMessage);
+                yield return error.ErrorMessage;
             }
         }
-
-        return errors;
     }
 }
