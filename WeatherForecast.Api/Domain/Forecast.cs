@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using WeatherForecast.Api.Helpers;
 
 namespace WeatherForecast.Api.Domain;
 
@@ -20,7 +21,7 @@ public class Forecast
     [Column(TypeName = "nvarchar(120)")] 
     public string? Summary { get; set; }
     
-    public int TemperatureF { get { return 32 + (int)(TemperatureC / 0.5556); } }
+    public int TemperatureF { get { return ForecastHelper.CentigradeToFahrenheit(TemperatureC); } }
 
     public Forecast(long id, DateOnly date, int temperatureC, string? summary)
     {

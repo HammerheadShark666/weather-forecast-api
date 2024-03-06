@@ -21,4 +21,9 @@ public static class ForecastHelper
             today = today.AddDays(1);
         }
     }
+
+    public static int CentigradeToFahrenheit(int centigrade)
+    { 
+        return (centigrade * 9 / 5) + 32;
+    }
 }
